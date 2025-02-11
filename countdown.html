@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Countdown Menuju Ramadan 1446 Hijriah</title>
+  <style>
+    /* Reset dasar */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      background: url("https://images.unsplash.com/photo-1579305796288-c534f6cf17ab?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D")
+                  no-repeat center center fixed;
+      background-size: cover;
+      font-family: Arial, sans-serif;
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      position: relative;
+    }
+    /* Overlay untuk meningkatkan kontras */
+    body::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.6);
+      z-index: 0;
+    }
+    .container {
+      position: relative;
+      width: 100%;
+      z-index: 1;
+      text-align: center;
+      animation: fadeIn 1.5s ease;
+    }
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
+    }
+    .countdown {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .time-box {
+      background: rgba(52, 73, 94, 0.8);
+      border-radius: 8px;
+      margin: 10px;
+      padding: 20px;
+      min-width: 100px;
+      max-width: 150px;
+      flex: 1 1 120px;
+      transition: transform 0.3s ease;
+    }
+    .time-box:hover {
+      transform: scale(1.05);
+    }
+    .number {
+      font-size: 3rem;
+      font-weight: bold;
+      margin-bottom: 5px;
+      transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+    .label {
+      font-size: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    /* Animasi fade-in saat container muncul */
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    /* Animasi pulse saat angka berubah */
+    @keyframes pulse {
+      0% {
+        transform: scale(1);
+        opacity: 1;
+      }
+      50% {
+        transform: scale(1.2);
+        opacity: 0.7;
+      }
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+    .pulse {
+      animation: pulse 0.5s ease;
+    }
+    /* Responsive */
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 2rem;
+      }
+      .time-box {
+        margin: 5px;
+        padding: 15px;
+        min-width: 80px;
+      }
+      .number {
+        font-size: 2.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Countdown <br> Menuju Ramadan 1446H</h1>
+    <div class="countdown">
+      <div class="time-box">
+        <div class="number" id="days">0</div>
+        <div class="label">Hari</div>
+      </div>
+      <div class="time-box">
+        <div class="number" id="hours">0</div>
+        <div class="label">Jam</div>
+      </div>
+      <div class="time-box">
+        <div class="number" id="minutes">0</div>
+        <div class="label">Menit</div>
+      </div>
+      <div class="time-box">
+        <div class="number" id="seconds">0</div>
+        <div class="label">Detik</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Atur tanggal target countdown
+    // Contoh: 12 Maret 2025 pukul 00:00:00
+    const targetDate = new Date("February 28, 2025 19:00:00").getTime();
+
+    function animateChange(element) {
+      element.classList.remove("pulse");
+      // Memaksa reflow agar animasi bisa dijalankan ulang
+      void element.offsetWidth;
+      element.classList.add("pulse");
+    }
+
+    function updateCountdown() {
+      const now = new Date().getTime();
+      const distance = targetDate - now;
+
+      if (distance < 0) {
+        document.querySelector(".container").innerHTML = "<h1>Ramadan Telah Dimulai!</h1>";
+        clearInterval(interval);
+        return;
+      }
+
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+      // Update dan animasi bila angka berubah
+      const daysEl = document.getElementById("days");
+      const hoursEl = document.getElementById("hours");
+      const minutesEl = document.getElementById("minutes");
+      const secondsEl = document.getElementById("seconds");
+
+      if (daysEl.innerText != days) {
+        daysEl.innerText = days;
+        animateChange(daysEl);
+      }
+      if (hoursEl.innerText != hours) {
+        hoursEl.innerText = hours;
+        animateChange(hoursEl);
+      }
+      if (minutesEl.innerText != minutes) {
+        minutesEl.innerText = minutes;
+        animateChange(minutesEl);
+      }
+      if (secondsEl.innerText != seconds) {
+        secondsEl.innerText = seconds;
+        animateChange(secondsEl);
+      }
+    }
+
+    updateCountdown();
+    const interval = setInterval(updateCountdown, 1000);
+  </script>
+</body>
+</html>
